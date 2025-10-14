@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Tycoon Clicker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #f7ff00, #db36a4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        
+        .game-area {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+        }
+        
+        .stats-panel {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .money-display {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, #00b09b, #96c93d);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .income-display {
+            font-size: 1.2rem;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #96c93d;
+        }
+        
+        .click-area {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .business-icon {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            cursor: pointer;
+            transition: transform 0.1s, box-shadow 0.3s;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            user-select: none;
+        }
+        
+        .business-icon:active {
+            transform: scale(0.95);
+        }
+        
+        .upgrades-panel {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+        
+        .upgrades-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .upgrade-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 15px;
+            transition: transform 0.2s, background 0.3s;
+            cursor: pointer;
+        }
+        
+        .upgrade-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .upgrade-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .upgrade-card.disabled:hover {
+            transform: none;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .upgrade-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .upgrade-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .upgrade-cost {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+        
+        .upgrade-description {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            color: #cccccc;
+        }
+        
+        .upgrade-level {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #aaaaaa;
+        }
+        
+        .managers-panel {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+        
+        .managers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .manager-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 15px;
+            transition: transform 0.2s, background 0.3s;
+            cursor: pointer;
+        }
+        
+        .manager-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .manager-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .manager-card.disabled:hover {
+            transform: none;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .manager-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .manager-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .manager-cost {
+            color: #ffcc00;
+            font-weight: bold;
+        }
+        
+        .manager-description {
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            color: #cccccc;
+        }
+        
+        .manager-income {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #96c93d;
+        }
+        
+        button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .achievements-panel {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+        }
+        
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .achievement-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .achievement-card.locked {
+            opacity: 0.5;
+        }
+        
+        .achievement-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .achievement-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .achievement-desc {
+            font-size: 0.8rem;
+            color: #cccccc;
+        }
+        
+        .tab-container {
+            display: flex;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .tab.active {
+            background: rgba(255, 255, 255, 0.2);
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @media (max-width: 900px) {
+            .game-area {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .money-display {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Business Tycoon Clicker</h1>
+            <p>Build your business empire from the ground up!</p>
+        </header>
+        
+        <div class="game-area">
+            <div class="stats-panel">
+                <div class="money-display" id="money">$0</div>
+                <div class="income-display" id="income">Income: $0/sec</div>
+                
+                <div class="tab-container">
+                    <div class="tab active" data-tab="upgrades">Upgrades</div>
+                    <div class="tab" data-tab="managers">Managers</div>
+                    <div class="tab" data-tab="achievements">Achievements</div>
+                </div>
+                
+                <div class="tab-content active" id="upgrades-tab">
+                    <div class="upgrades-grid" id="upgrades-container">
+                        <!-- Upgrades will be added here dynamically -->
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="managers-tab">
+                    <div class="managers-grid" id="managers-container">
+                        <!-- Managers will be added here dynamically -->
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="achievements-tab">
+                    <div class="achievements-grid" id="achievements-container">
+                        <!-- Achievements will be added here dynamically -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="click-area">
+                <div class="business-icon" id="business-click">
+                    💼
+                </div>
+                <p>Click to earn money!</p>
+                <p id="click-value">$1 per click</p>
+                
+                <div class="stats">
+                    <p>Business Level: <span id="business-level">1</span></p>
+                    <p>Total Clicks: <span id="total-clicks">0</span></p>
+                    <p>Total Earnings: <span id="total-earnings">$0</span></p>
+                </div>
+                
+                <button id="prestige-btn">Prestige (Reset for Bonus)</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const gameState = {
+            money: 0,
+            totalMoney: 0,
+            income: 0,
+            clickValue: 1,
+            totalClicks: 0,
+            businessLevel: 1,
+            prestige: 0,
+            prestigeBonus: 1,
+            
+            upgrades: {
+                clickPower: { level: 0, cost: 10, multiplier: 1.5, name: "Click Power", description: "Increase money per click" },
+                autoClicker: { level: 0, cost: 50, multiplier: 1.8, name: "Auto Clicker", description: "Automatically clicks once per second" },
+                marketing: { level: 0, cost: 100, multiplier: 2, name: "Marketing", description: "Increases all income by 10%" },
+                efficiency: { level: 0, cost: 500, multiplier: 2.5, name: "Efficiency", description: "Doubles all income" },
+                expansion: { level: 0, cost: 1000, multiplier: 3, name: "Expansion", description: "Triples all income" }
+            },
+            
+            managers: {
+                intern: { 
+                    level: 0, 
+                    cost: 500, 
+                    income: 5, 
+                    name: "Intern", 
+                    description: "A hardworking intern",
+                    hired: false 
+                },
+                assistant: { 
+                    level: 0, 
+                    cost: 2000, 
+                    income: 20, 
+                    name: "Assistant Manager", 
+                    description: "Helps manage your business",
+                    hired: false 
+                },
+                manager: { 
+                    level: 0, 
+                    cost: 10000, 
+                    income: 100, 
+                    name: "Manager", 
+                    description: "A professional manager",
+                    hired: false 
+                },
+                executive: { 
+                    level: 0, 
+                    cost: 50000, 
+                    income: 500, 
+                    name: "Executive", 
+                    description: "A high-level executive",
+                    hired: false 
+                },
+                ceo: { 
+                    level: 0, 
+                    cost: 250000, 
+                    income: 2500, 
+                    name: "CEO", 
+                    description: "A Chief Executive Officer",
+                    hired: false 
+                }
+            },
+            
+            achievements: {
+                firstMillion: { 
+                    name: "First Million", 
+                    description: "Earn $1,000,000", 
+                    achieved: false, 
+                    icon: "💰" 
+                },
+                clickMaster: { 
+                    name: "Click Master", 
+                    description: "Click 1000 times", 
+                    achieved: false, 
+                    icon: "👆" 
+                },
+                businessMogul: { 
+                    name: "Business Mogul", 
+                    description: "Reach business level 10", 
+                    achieved: false, 
+                    icon: "🏢" 
+                },
+                managerTeam: { 
+                    name: "Manager Team", 
+                    description: "Hire all managers", 
+                    achieved: false, 
+                    icon: "👥" 
+                },
+                tycoon: { 
+                    name: "Tycoon", 
+                    description: "Earn $10,000,000", 
+                    achieved: false, 
+                    icon: "👑" 
+                }
+            }
+        };
+
+        // DOM Elements
+        const moneyElement = document.getElementById('money');
+        const incomeElement = document.getElementById('income');
+        const clickValueElement = document.getElementById('click-value');
+        const businessLevelElement = document.getElementById('business-level');
+        const totalClicksElement = document.getElementById('total-clicks');
+        const totalEarningsElement = document.getElementById('total-earnings');
+        const businessClickElement = document.getElementById('business-click');
+        const upgradesContainer = document.getElementById('upgrades-container');
+        const managersContainer = document.getElementById('managers-container');
+        const achievementsContainer = document.getElementById('achievements-container');
+        const prestigeButton = document.getElementById('prestige-btn');
+
+        // Initialize the game
+        function init() {
+            loadGame();
+            renderUpgrades();
+            renderManagers();
+            renderAchievements();
+            setupEventListeners();
+            startGameLoop();
+            
+            updateUI();
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Click to earn money
+            businessClickElement.addEventListener('click', handleBusinessClick);
+            
+            // Prestige button
+            prestigeButton.addEventListener('click', handlePrestige);
+            
+            // Tab switching
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs and contents
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab and corresponding content
+                    this.classList.add('active');
+                    document.getElementById(`${this.dataset.tab}-tab`).classList.add('active');
+                });
+            });
+        }
+
+        // Handle business click
+        function handleBusinessClick() {
+            const earnings = gameState.clickValue * gameState.prestigeBonus;
+            gameState.money += earnings;
+            gameState.totalMoney += earnings;
+            gameState.totalClicks++;
+            
+            // Add visual feedback
+            businessClickElement.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                businessClickElement.style.transform = 'scale(1)';
+            }, 100);
+            
+            // Check achievements
+            checkAchievements();
+            
+            updateUI();
+            saveGame();
+        }
+
+        // Handle prestige
+        function handlePrestige() {
+            if (gameState.totalMoney < 1000000) {
+                alert("You need at least $1,000,000 to prestige!");
+                return;
+            }
+            
+            if (confirm("Prestiging will reset your progress but give you a permanent income bonus. Continue?")) {
+                gameState.prestige++;
+                gameState.prestigeBonus = 1 + (gameState.prestige * 0.5);
+                
+                // Reset game state but keep prestige
+                gameState.money = 0;
+                gameState.income = 0;
+                gameState.clickValue = 1;
+                gameState.totalClicks = 0;
+                gameState.businessLevel = 1;
+                
+                // Reset upgrades
+                Object.keys(gameState.upgrades).forEach(key => {
+                    gameState.upgrades[key].level = 0;
+                    gameState.upgrades[key].cost = gameState.upgrades[key].cost; // Reset to base cost
+                });
+                
+                // Reset managers
+                Object.keys(gameState.managers).forEach(key => {
+                    gameState.managers[key].level = 0;
+                    gameState.managers[key].hired = false;
+                });
+                
+                updateUI();
+                saveGame();
+                alert(`Prestige successful! You now have a ${gameState.prestigeBonus}x income bonus.`);
+            }
+        }
+
+        // Buy upgrade
+        function buyUpgrade(upgradeId) {
+            const upgrade = gameState.upgrades[upgradeId];
+            
+            if (gameState.money >= upgrade.cost) {
+                gameState.money -= upgrade.cost;
+                upgrade.level++;
+                upgrade.cost = Math.floor(upgrade.cost * upgrade.multiplier);
+                
+                // Apply upgrade effects
+                applyUpgradeEffect(upgradeId);
+                
+                updateUI();
+                renderUpgrades();
+                saveGame();
+            }
+        }
+
+        // Apply upgrade effects
+        function applyUpgradeEffect(upgradeId) {
+            switch(upgradeId) {
+                case 'clickPower':
+                    gameState.clickValue = 1 + (gameState.upgrades.clickPower.level * 0.5);
+                    break;
+                case 'marketing':
+                    // This is applied in the income calculation
+                    break;
+                case 'efficiency':
+                    // This is applied in the income calculation
+                    break;
+                case 'expansion':
+                    // This is applied in the income calculation
+                    break;
+            }
+        }
+
+        // Hire manager
+        function hireManager(managerId) {
+            const manager = gameState.managers[managerId];
+            
+            if (gameState.money >= manager.cost && !manager.hired) {
+                gameState.money -= manager.cost;
+                manager.hired = true;
+                manager.level = 1;
+                
+                updateUI();
+                renderManagers();
+                saveGame();
+            } else if (manager.hired && gameState.money >= manager.cost) {
+                // Level up manager
+                gameState.money -= manager.cost;
+                manager.level++;
+                manager.cost = Math.floor(manager.cost * 2);
+                
+                updateUI();
+                renderManagers();
+                saveGame();
+            }
+        }
+
+        // Calculate income
+        function calculateIncome() {
+            let income = 0;
+            
+            // Manager income
+            Object.keys(gameState.managers).forEach(key => {
+                const manager = gameState.managers[key];
+                if (manager.hired) {
+                    income += manager.income * manager.level;
+                }
+            });
+            
+            // Upgrade multipliers
+            const marketingMultiplier = 1 + (gameState.upgrades.marketing.level * 0.1);
+            const efficiencyMultiplier = gameState.upgrades.efficiency.level > 0 ? 2 : 1;
+            const expansionMultiplier = gameState.upgrades.expansion.level > 0 ? 3 : 1;
+            
+            income = income * marketingMultiplier * efficiencyMultiplier * expansionMultiplier;
+            
+            // Auto clicker
+            if (gameState.upgrades.autoClicker.level > 0) {
+                income += gameState.clickValue * gameState.upgrades.autoClicker.level;
+            }
+            
+            return income * gameState.prestigeBonus;
+        }
+
+        // Check achievements
+        function checkAchievements() {
+            // First Million
+            if (!gameState.achievements.firstMillion.achieved && gameState.totalMoney >= 1000000) {
+                gameState.achievements.firstMillion.achieved = true;
+                showAchievementNotification("First Million");
+            }
+            
+            // Click Master
+            if (!gameState.achievements.clickMaster.achieved && gameState.totalClicks >= 1000) {
+                gameState.achievements.clickMaster.achieved = true;
+                showAchievementNotification("Click Master");
+            }
+            
+            // Business Mogul
+            if (!gameState.achievements.businessMogul.achieved && gameState.businessLevel >= 10) {
+                gameState.achievements.businessMogul.achieved = true;
+                showAchievementNotification("Business Mogul");
+            }
+            
+            // Manager Team
+            if (!gameState.achievements.managerTeam.achieved) {
+                let allHired = true;
+                Object.keys(gameState.managers).forEach(key => {
+                    if (!gameState.managers[key].hired) {
+                        allHired = false;
+                    }
+                });
+                
+                if (allHired) {
+                    gameState.achievements.managerTeam.achieved = true;
+                    showAchievementNotification("Manager Team");
+                }
+            }
+            
+            // Tycoon
+            if (!gameState.achievements.tycoon.achieved && gameState.totalMoney >= 10000000) {
+                gameState.achievements.tycoon.achieved = true;
+                showAchievementNotification("Tycoon");
+            }
+            
+            renderAchievements();
+        }
+
+        // Show achievement notification
+        function showAchievementNotification(achievementName) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(to right, #00b09b, #96c93d);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                z-index: 1000;
+                animation: slideIn 0.5s, slideOut 0.5s 2.5s;
+            `;
+            
+            notification.innerHTML = `
+                <div style="font-weight: bold; margin-bottom: 5px;">Achievement Unlocked!</div>
+                <div>${achievementName}</div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Remove notification after animation
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 3000);
+        }
+
+        // Render upgrades
+        function renderUpgrades() {
+            upgradesContainer.innerHTML = '';
+            
+            Object.keys(gameState.upgrades).forEach(key => {
+                const upgrade = gameState.upgrades[key];
+                const canAfford = gameState.money >= upgrade.cost;
+                
+                const upgradeElement = document.createElement('div');
+                upgradeElement.className = `upgrade-card ${canAfford ? '' : 'disabled'}`;
+                upgradeElement.innerHTML = `
+                    <div class="upgrade-header">
+                        <div class="upgrade-name">${upgrade.name}</div>
+                        <div class="upgrade-cost">$${formatNumber(upgrade.cost)}</div>
+                    </div>
+                    <div class="upgrade-description">${upgrade.description}</div>
+                    <div class="upgrade-level">
+                        <span>Level: ${upgrade.level}</span>
+                        <span>+${(upgrade.multiplier - 1) * 100}%</span>
+                    </div>
+                `;
+                
+                if (canAfford) {
+                    upgradeElement.addEventListener('click', () => buyUpgrade(key));
+                }
+                
+                upgradesContainer.appendChild(upgradeElement);
+            });
+        }
+
+        // Render managers
+        function renderManagers() {
+            managersContainer.innerHTML = '';
+            
+            Object.keys(gameState.managers).forEach(key => {
+                const manager = gameState.managers[key];
+                const canAfford = gameState.money >= manager.cost;
+                
+                const managerElement = document.createElement('div');
+                managerElement.className = `manager-card ${canAfford || manager.hired ? '' : 'disabled'}`;
+                managerElement.innerHTML = `
+                    <div class="manager-header">
+                        <div class="manager-name">${manager.name}</div>
+                        <div class="manager-cost">$${formatNumber(manager.cost)}</div>
+                    </div>
+                    <div class="manager-description">${manager.description}</div>
+                    <div class="manager-income">
+                        <span>Income: $${formatNumber(manager.income * manager.level)}/sec</span>
+                        <span>Level: ${manager.level}</span>
+                    </div>
+                `;
+                
+                if (canAfford || manager.hired) {
+                    managerElement.addEventListener('click', () => hireManager(key));
+                }
+                
+                managersContainer.appendChild(managerElement);
+            });
+        }
+
+        // Render achievements
+        function renderAchievements() {
+            achievementsContainer.innerHTML = '';
+            
+            Object.keys(gameState.achievements).forEach(key => {
+                const achievement = gameState.achievements[key];
+                
+                const achievementElement = document.createElement('div');
+                achievementElement.className = `achievement-card ${achievement.achieved ? '' : 'locked'}`;
+                achievementElement.innerHTML = `
+                    <div class="achievement-icon">${achievement.icon}</div>
+                    <div class="achievement-name">${achievement.name}</div>
+                    <div class="achievement-desc">${achievement.description}</div>
+                `;
+                
+                achievementsContainer.appendChild(achievementElement);
+            });
+        }
+
+        // Update UI
+        function updateUI() {
+            // Update money display
+            moneyElement.textContent = `$${formatNumber(gameState.money)}`;
+            
+            // Update income
+            gameState.income = calculateIncome();
+            incomeElement.textContent = `Income: $${formatNumber(gameState.income)}/sec`;
+            
+            // Update click value
+            clickValueElement.textContent = `$${formatNumber(gameState.clickValue * gameState.prestigeBonus)} per click`;
+            
+            // Update business level (based on total money)
+            const newLevel = Math.floor(Math.log10(gameState.totalMoney + 1)) + 1;
+            if (newLevel > gameState.businessLevel) {
+                gameState.businessLevel = newLevel;
+            }
+            businessLevelElement.textContent = gameState.businessLevel;
+            
+            // Update stats
+            totalClicksElement.textContent = gameState.totalClicks;
+            totalEarningsElement.textContent = `$${formatNumber(gameState.totalMoney)}`;
+            
+            // Update prestige button
+            prestigeButton.textContent = `Prestige (${gameState.prestigeBonus}x Bonus)`;
+            prestigeButton.disabled = gameState.totalMoney < 1000000;
+        }
+
+        // Format large numbers
+        function formatNumber(num) {
+            if (num < 1000) return Math.floor(num);
+            if (num < 1000000) return (num / 1000).toFixed(1) + 'K';
+            if (num < 1000000000) return (num / 1000000).toFixed(1) + 'M';
+            return (num / 1000000000).toFixed(1) + 'B';
+        }
+
+        // Game loop
+        function startGameLoop() {
+            setInterval(() => {
+                // Add passive income
+                gameState.money += gameState.income / 10;
+                gameState.totalMoney += gameState.income / 10;
+                
+                // Check achievements
+                checkAchievements();
+                
+                updateUI();
+                renderUpgrades();
+                renderManagers();
+                saveGame();
+            }, 100);
+        }
+
+        // Save game
+        function saveGame() {
+            localStorage.setItem('businessTycoonSave', JSON.stringify(gameState));
+        }
+
+        // Load game
+        function loadGame() {
+            const save = localStorage.getItem('businessTycoonSave');
+            if (save) {
+                const savedState = JSON.parse(save);
+                Object.assign(gameState, savedState);
+            }
+        }
+
+        // Add CSS for achievement animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); }
+                to { transform: translateX(0); }
+            }
+            
+            @keyframes slideOut {
+                from { transform: translateX(0); }
+                to { transform: translateX(100%); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize the game when the page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
