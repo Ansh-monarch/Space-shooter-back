@@ -2,22 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Multiplayer Space Shooter</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="gameContainer">
-        <canvas id="gameCanvas" width="800" height="600"></canvas>
-        <div id="ui">
-            <div id="score">Score: 0</div>
-            <div id="health">Health: 100</div>
-            <div id="players">Players: 1</div>
+        <div id="loadingScreen">
+            <div class="loading-content">
+                <h1>🚀 Space Shooter</h1>
+                <p>Connecting to game server...</p>
+                <div class="loader"></div>
+                <div id="serverStatus">Server: https://space-shooter-back1.onrender.com</div>
+            </div>
         </div>
-        <div id="instructions">
-            <p>Use W, A, S, D to move | Mouse to aim | Click to shoot</p>
+        
+        <canvas id="gameCanvas"></canvas>
+        
+        <!-- Mobile Controls -->
+        <div id="mobileControls" class="mobile-only">
+            <div class="control-row">
+                <div class="joystick-area" id="moveJoystick">
+                    <div class="joystick"></div>
+                </div>
+                <div class="action-buttons">
+                    <button id="shootBtn" class="action-btn">🔫 SHOOT</button>
+                    <button id="thrustBtn" class="action-btn">🚀 THRUST</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Desktop UI -->
+        <div id="ui">
+            <div id="playerInfo">
+                <div id="health">🛡️ Health: 100%</div>
+                <div id="score">⭐ Score: 0</div>
+                <div id="players">👥 Players: 1</div>
+            </div>
+            <div id="gameInfo">
+                <div id="asteroids">🌑 Asteroids: 0</div>
+                <div id="ping">📶 Ping: --</div>
+            </div>
+        </div>
+        
+        <div id="instructions" class="desktop-only">
+            <p><strong>Desktop:</strong> WASD to move • Mouse to aim • Click to shoot</p>
+            <p><strong>Mobile:</strong> Use joystick and buttons below</p>
+        </div>
+        
+        <div id="controlsHelp" class="mobile-only">
+            <p>← Drag to move • Tap buttons to shoot/thrust</p>
+        </div>
+        
+        <div id="chat">
+            <div id="messages"></div>
+            <input type="text" id="messageInput" placeholder="Type a message... (Enter to send)">
         </div>
     </div>
+
     <script src="/socket.io/socket.io.js"></script>
     <script src="client.js"></script>
 </body>
